@@ -1,2 +1,2 @@
 #!/bin/bash
-chown betty hello
+chmod +x change_owner.sh
