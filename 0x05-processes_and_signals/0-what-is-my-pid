@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#  This Bash script displays it's own pid
+
+#  echo "$$" | pgrep bash | awk '{print $1}'
+#  OR
+#  ps | pgrep bash | awk '{print $1}'
+#  OR
+
+echo "$$"
