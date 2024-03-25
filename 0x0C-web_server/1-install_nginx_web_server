@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 # Installs nginx web server on a new ubuntu server
 
-sudo apt update
-sudo apt install -y nginx
-sudo ufw allow 'Nginx HTTP'
-#echo "Hello World!" | sudo tee /var/www/html/index.html
-#OR
-echo "Hello World!" | tee /var/www/html/index.nginx-debian.html
+# Update package list and install nginx
+sudo apt-get -y update
+sudo apt-get install -y nginx
+
+# Ensure nginx is listening to port 80
+ufw allow 'Nginx HTTP'
+
+# Set up the default page
+echo "Hello World!" > /var/www/html/index.html
+
+# Restart nginx (without using systemctl)
 sudo service nginx restart
