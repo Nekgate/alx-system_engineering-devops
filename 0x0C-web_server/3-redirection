@@ -1,25 +1,35 @@
-#!usr/bin/env bash
-# This script installs 'Nginx HTTP' and redirects /redirect_me
+#!/usr/bin/env bash
+# This script installs Nginx HTTP server and configures redirection
 
+# Update package index
 sudo apt update
+
+# Install Nginx
 sudo apt install -y nginx
+
+# Allow Nginx through firewall
 sudo ufw allow 'Nginx HTTP'
-echo "Hello World!" | sudo tee /var/www/html/index.html
-# OR
-# echo "Hello World!" > index.html
-# sudo mv index.html /var/www/html
 
-echo "server {
-	    listen 80 default_server;
-        listen [::]:80 default_server;
+# Create index.html with "Hello World!"
+echo "Hello World!" | sudo tee /var/www/html/index.html >/dev/null
 
-        root /var/www/html;
-        index index.html;
+# Configure Nginx to redirect /redirect_me
+sudo bash -c 'cat <<EOF > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-        location /redirect_me {
-                return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-        }
-}" > default
+    root /var/www/html;
+    index index.html;
 
-sudo mv -f default /etc/nginx/sites-available/default
-sudo service nginx restart
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF'
+
+# Enable the redirection site
+sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Restart Nginx to apply changes
+sudo systemctl restart nginx
